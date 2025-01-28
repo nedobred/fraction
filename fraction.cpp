@@ -16,16 +16,6 @@ public:
 		m_numerator = 0;
 		m_denominator = 1;
 	}
-	//Fraction(int k_numerator, int k_denominator) // Конструктор с двумя параметрами
-	//{
-		
-		//{
-			//m_numerator = k_numerator;
-			//m_denominator = k_denominator;
-		//}
-
-	//}
-
 	Fraction(int k_numerator, int k_denominator = 1) // Конструктор с одним параметром, один из которых имеет значение по умолчанию
 	{
 		if (k_denominator != 0)
@@ -45,11 +35,13 @@ public:
 		return m_denominator;
 	}
 
-	
-	double getValue() 
-	{ 
-		return static_cast<double>(m_numerator) / m_denominator; 
+
+	double getValue()
+	{
+		return static_cast<double>(m_numerator) / m_denominator;
 	}
+	/////////////////////////////////////////////////////////////////////////////
+	Fraction operator/(Fraction value1, Fraction value2);
 
 private:
 	int m_numerator;		// переменная член класса - числитель
@@ -57,7 +49,10 @@ private:
 };
 
 
-
+Fraction Fraction::operator/(Fraction value1)		// деление
+{
+	return Fraction(m_numerator/m_denominator);
+}
 
 int main()
 {
@@ -66,10 +61,11 @@ int main()
 	
 	int numerator1;
 	int denominator1;
+	
 	int numerator2;
 	int denominator2;
 
-	// блок ввода значений для перовй дроби
+	// блок ввода значений для перовой дроби
 	cout << "Введите числитель и знаменатель первой дроби: ";
 	cin >> numerator1;
 	cin >> denominator1;
@@ -82,6 +78,12 @@ int main()
 	cin >> denominator2;
 	Fraction drob2 (numerator2, denominator2);	// uniform-инициализация, вызывается конструктор Fraction(int, int)
 	cout << drob2.getNumerator() << "/" << drob2.getDenominator() << '\n';
+	
+	
+
+	Fraction result = drob1 / drob2;
+	cout << endl;
+	cout << result.getNumerator() << "/" << result.getDenominator() << '\n';
 	
 	
 	
