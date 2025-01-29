@@ -39,15 +39,17 @@ public:
 		return static_cast<double>(m_numerator) / m_denominator;
 	}
 
+	int getTest_num() const { return m_numerator; }
+	int getTest_den() const { return m_denominator; }
 	
 	/////////////////////////////////////////////////////////////////////////////
 	
 	
 	
-	friend Fraction operator/(Fraction value1, Fraction value2); // дружественная функция перегрузки оператора деление
-	friend Fraction operator*(Fraction value1, Fraction value2); // дружественная функция перегрузки оператора умножение
-	friend Fraction operator-(Fraction value1, Fraction value2); // дружественная функция перегрузки оператора вычитание
-	friend Fraction operator+(Fraction value1, Fraction value2); // дружественная функция перегрузки оператора сложение
+	friend Fraction operator/(Fraction value1, Fraction value2); // объявление дружественной функции перегрузки оператора деление
+	friend Fraction operator*(Fraction value1, Fraction value2); // объявление дружественной функции перегрузки оператора умножение
+	friend Fraction operator-(Fraction value1, Fraction value2); // объявление дружественной функции перегрузки оператора вычитание
+	friend Fraction operator+(Fraction value1, Fraction value2); // объявление дружественной функции перегрузки оператора сложение
 
 
 	//friend Fraction operator<<(Fraction value1, Fraction value2); // дружественная функция перегрузки оператора вывода на экран
@@ -58,48 +60,53 @@ private:
 };
 // конец класса
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Fraction operator/(Fraction value1, Fraction value2)		// перегрузка оператора деление
 {
 	Fraction f_result;	// создаем переменную для хранение значений
 
-	f_result = (value1.m_denominator*value2.m_numerator)/(value1.m_numerator*value2.m_denominator);
+	f_result.m_numerator = (value1.m_numerator *value2.m_denominator);	// считаем значение числителя
+	f_result.m_denominator = (value1.m_denominator * value2.m_numerator);	// считаем значение знаменателя
+	if (f_result.m_numerator == f_result.m_denominator)
 	return f_result;
 }
-
+//------------------------------------------------------------------------------------------------------------------------------------
 Fraction operator*(Fraction value1, Fraction value2)		// перегрузка оператора умножение
 {
 	Fraction f_result;	// создаем переменную для хранение значений
 
-	f_result = (value1.m_denominator * value2.m_denominator) / (value1.m_numerator * value2.m_numerator);
+	f_result.m_numerator = (value1.m_numerator * value2.m_numerator);
+	f_result.m_denominator = (value1.m_denominator * value2.m_denominator);
 	return f_result;
 }
-
-Fraction operator-(Fraction value1, Fraction value2)
+//------------------------------------------------------------------------------------------------------------------------------------
+Fraction operator-(Fraction value1, Fraction value2)		// перегрузка оператора вычитание
 {
 	Fraction f_result;	// создаем переменную для хранение значений
 
-	f_result = (value1.m_numerator * value2.m_denominator + value2.m_numerator * value1.m_denominator) / (value1.m_denominator * value2.m_denominator);
+	f_result.m_numerator = (value1.m_numerator * value2.m_denominator - value2.m_numerator * value1.m_denominator); // числитель
+	f_result.m_denominator = (value1.m_denominator * value2.m_denominator); // знаменатель
 	return f_result;
 }
-
-
-
+//------------------------------------------------------------------------------------------------------------------------------------
 Fraction operator+(Fraction value1, Fraction value2)		// перегрузка оператора сложение
 {
 	Fraction f_result;	// создаем переменную для хранение значений
 
-	f_result = (value1.m_numerator * value2.m_denominator - value2.m_numerator * value1.m_denominator) / (value1.m_denominator * value2.m_denominator);
+	f_result.m_numerator = (value1.m_numerator * value2.m_denominator + value2.m_numerator * value1.m_denominator); // числитель
+	f_result.m_denominator = (value1.m_denominator * value2.m_denominator);		// знаменатель
 	return f_result;
 }
-
-
-
-
-
-
-
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+enum Action
+{
+	division = 1,
+	multiplication = 2,
+	subtraction = 3,
+	addition = 4,
+};
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main()
 {
 	setlocale(LC_ALL, ""); 
@@ -112,27 +119,52 @@ int main()
 	int denominator2;
 
 	// блок ввода значений для перовой дроби
-	cout << "Введите числитель и знаменатель первой дроби: ";
+	cout << "Введите числитель первой дроби: ";
 	cin >> numerator1;
+	cout << "Введите знаменатель первой дроби: ";
 	cin >> denominator1;
 	Fraction drob1 (numerator1, denominator1);	// uniform-инициализация, вызывается конструктор Fraction(int, int)
-	//cout << drob1.getNumerator() << "/" << drob1.getDenominator() << '\n';
+	cout << "Первая дробь: " << drob1.getNumerator() << "/" << drob1.getDenominator() << '\n';
 
 	// блок ввода значений для второй дроби
-	cout << "Введите числитель и знаменатель второй дроби: ";
+	cout << "Введите числитель второй дроби: ";
 	cin >> numerator2;
+	cout << "Введите знаменатель второй дроби: ";
 	cin >> denominator2;
 	Fraction drob2 (numerator2, denominator2);	// uniform-инициализация, вызывается конструктор Fraction(int, int)
-	//cout << drob2.getNumerator() << "/" << drob2.getDenominator() << '\n';
-	
-	
-	// деление дробей
-	
-	Fraction result = drob1 / drob2;
+	cout << "Вторая дробь: " << drob2.getNumerator() << "/" << drob2.getDenominator() << '\n';
+	// блок запроса арифметического действия
 	cout << endl;
-	cout << result.getValue() << '\n';
+	cout << "Выберите арифметическое действие:\n1 - деление\n2 - умножение\n3 - вычитание\n4 - сложение" << endl;
+	int action;
+	cin >> action;
 	
-	
+	if (action == 1) //деление
+	{
+		Fraction result = drob1 / drob2;
+		cout << endl;
+		cout << result.getTest_num() << "/" << result.getTest_den() << '\n';
+	}
+	else if (action == 2) //умножение
+	{
+		Fraction result = drob1 * drob2;
+		cout << endl;
+		cout << result.getTest_num() << "/" << result.getTest_den() << '\n';
+	}
+
+	else if (action == 3) //вычитание
+	{
+		Fraction result = drob1 - drob2;
+		cout << endl;
+		cout << result.getTest_num() << "/" << result.getTest_den() << '\n';
+	}
+
+	else if (action == 4) //сложение
+	{
+		Fraction result = drob1 + drob2;
+		cout << endl;
+		cout << result.getTest_num() << "/" << result.getTest_den() << '\n';
+	}
 	
 	return 0;
 }
